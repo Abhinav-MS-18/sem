@@ -1,0 +1,200 @@
+🔹 1. Database Commands
+
+
+Command	Description
+show dbs	Lists all databases
+use myDatabase	Switches to or creates a new database
+db	Shows the current database
+db.dropDatabase()	Deletes the current database
+🔹 2. Collection Commands
+
+
+Command	Description
+show collections	Lists all collections in the current database
+db.createCollection("myCollection")	Creates a new collection
+db.myCollection.drop()	Deletes the collection
+🔹 3. Insert Operations
+
+
+Command	Description
+db.collection.insertOne({name: "Alice", age: 25})	Inserts a single document
+db.collection.insertMany([{...}, {...}])	Inserts multiple documents
+🔹 4. Read (Query) Operations
+
+
+Command	Description
+db.collection.find()	Retrieves all documents
+db.collection.find().pretty()	Formats output neatly
+db.collection.find({age: 25})	Finds documents with age 25
+db.collection.findOne({name: "Alice"})	Returns the first matching document
+db.collection.find({}, {name: 1, _id: 0})	Projection (only show name)
+🔹 5. Update Operations
+
+
+Command	Description
+db.collection.updateOne({name: "Alice"}, {$set: {age: 26}})	Updates one document
+db.collection.updateMany({}, {$set: {status: "active"}})	Updates multiple documents
+db.collection.replaceOne({name: "Alice"}, {name: "Alice", age: 30})	Replaces the whole document
+🔹 6. Delete Operations
+
+
+Command	Description
+db.collection.deleteOne({name: "Alice"})	Deletes one matching document
+db.collection.deleteMany({age: {$lt: 18}})	Deletes all matching documents
+🔹 7. Query Operators
+
+
+Operator	Usage
+$gt, $lt	Greater than, less than
+$gte, $lte	Greater than or equal to, less than or equal to
+$eq, $ne	Equal, Not equal
+$in, $nin	In array, Not in array
+$and, $or	Logical AND, OR
+db.collection.find({ $or: [{age: {$gt: 20}}, {status: "active"}] })
+🔹 8. Aggregation Commands
+
+
+Command	Description
+db.collection.countDocuments({})	Count documents
+db.collection.aggregate([{ $group: {_id: "$status", total: {$sum: 1}} }])	Grouping
+db.collection.distinct("status")	Distinct values for a field
+db.collection.aggregate([{ $match: {age: {$gt: 25}} }])	Filtering using pipeline
+🔹 9. Indexing
+
+
+Command	Description
+db.collection.createIndex({name: 1})	Create index on name (1 for ascending, -1 for descending)
+db.collection.getIndexes()	Show indexes
+🔹 10. Useful Utility Commands
+
+
+Command	Description
+db.collection.stats()	Stats about the collection
+db.collection.find().limit(5)	Limit number of results
+db.collection.find().sort({age: -1})	Sort descending by age
+db.collection.find().skip(10)	Skip first 10 results
+Let me know if you want commands for MongoDB Compass, MongoDB with Python (PyMongo), or queries with aggregation pipelines for analytics use cases!
+
+You said:
+all aggragte functions
+ChatGPT said:
+Here's a complete list of MongoDB aggregation functions (used inside the $group, $project, and other stages of the aggregation pipeline), along with brief descriptions and examples:
+
+🔹 MongoDB Aggregation Functions
+
+✅ Common $group Stage Functions
+
+Function	Description	Example
+$sum	Calculates sum of numeric values	{ $sum: "$amount" }
+$avg	Calculates average	{ $avg: "$price" }
+$min	Returns minimum value	{ $min: "$age" }
+$max	Returns maximum value	{ $max: "$score" }
+$push	Adds value to an array	{ $push: "$name" }
+$addToSet	Adds unique values to array	{ $addToSet: "$tag" }
+$first	Gets the first document in group	{ $first: "$name" }
+$last	Gets the last document in group	{ $last: "$status" }
+$count	Special shortcut for counting documents	{ $count: "totalDocs" }
+✅ Arithmetic Expressions (used in $project, $addFields, etc.)
+
+Function	Description	Example
+$add	Adds numbers	{ $add: [ "$a", "$b" ] }
+$subtract	Subtracts two numbers	{ $subtract: [ "$a", "$b" ] }
+$multiply	Multiplies numbers	{ $multiply: [ "$a", "$b" ] }
+$divide	Divides two numbers	{ $divide: [ "$a", "$b" ] }
+$mod	Remainder (modulo)	{ $mod: [ "$a", 5 ] }
+✅ Array Aggregation Operators
+
+Function	Description	Example
+$size	Gets length of array	{ $size: "$tags" }
+$arrayElemAt	Gets element at index	{ $arrayElemAt: [ "$items", 0 ] }
+$filter	Filters elements of an array	Filters based on a condition
+$in	Checks if value is in array	
+You said:
+with syntax
+ChatGPT said:
+Here is a complete list of MongoDB aggregation functions with syntax and usage examples, organized by category for analytics and data summarization.
+
+🔹 1. $sum
+
+Adds values within a group.
+
+{ $group: { _id: "$category", total: { $sum: "$amount" } } }
+🔹 2. $avg
+
+Calculates the average.
+
+{ $group: { _id: "$department", avgSalary: { $avg: "$salary" } } }
+🔹 3. $min
+
+Finds the minimum value.
+
+{ $group: { _id: "$item", minPrice: { $min: "$price" } } }
+🔹 4. $max
+
+Finds the maximum value.
+
+{ $group: { _id: "$item", maxScore: { $max: "$score" } } }
+🔹 5. $count
+
+Counts documents.
+
+{ $count: "totalDocuments" }
+🔹 6. $push
+
+Creates an array of values, including duplicates.
+
+{ $group: { _id: "$category", allItems: { $push: "$item" } } }
+🔹 7. $addToSet
+
+Creates an array with unique values only.
+
+{ $group: { _id: "$class", uniqueSubjects: { $addToSet: "$subject" } } }
+🔹 8. $first and $last
+
+Returns the first or last document's field in the group.
+
+{ $group: { _id: "$category", firstEntry: { $first: "$name" } } }
+{ $group: { _id: "$category", lastEntry: { $last: "$name" } } }
+🔹 9. Arithmetic Operators
+
+$add
+{ $project: { total: { $add: ["$price", "$tax"] } } }
+$subtract
+{ $project: { difference: { $subtract: ["$income", "$expense"] } } }
+$multiply
+{ $project: { total: { $multiply: ["$quantity", "$price"] } } }
+$divide
+{ $project: { avg: { $divide: ["$total", "$count"] } } }
+$mod
+{ $project: { remainder: { $mod: ["$value", 2] } } }
+🔹 10. Array Aggregation
+
+$size
+{ $project: { tagCount: { $size: "$tags" } } }
+$arrayElemAt
+{ $project: { firstTag: { $arrayElemAt: ["$tags", 0] } } }
+$in
+{ $project: { isActive: { $in: ["active", "$statusList"] } } }
+$filter
+{
+  $project: {
+    passedScores: {
+      $filter: {
+        input: "$scores",
+        as: "score",
+        cond: { $gte: ["$$score", 50] }
+      }
+    }
+  }
+}
+🔹 11. $group with Multiple Aggregations
+
+{
+  $group: {
+    _id: "$category",
+    totalSales: { $sum: "$amount" },
+    averageSales: { $avg: "$amount" },
+    maxSale: { $max: "$amount" }
+  }
+}
+Let me know if you want a full aggregation pipeline example or something specific like match, sort, or lookup functions!
