@@ -1,0 +1,22 @@
+
+
+1)
+chmod 400 calc-key.pem
+ssh -i calc-key.pem ec2-user@<ip> (enters into shell)
+
+(to install http server)
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+
+
+2)
+(to copy index.html from local machine to cloud)
+scp -i calc-key.pem index.html ec2-user@<ip>:/tmp/
+(move index.html to http's default folder)
+sudo mv /tmp/index.html /var/www/html/
+
+
+3)
+http:<ip>
