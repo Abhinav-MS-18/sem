@@ -1,0 +1,49 @@
+CREATE TABLE products (
+    product_id INT,
+    name STRING,
+    category STRING,
+    price FLOAT,
+    in_stock BOOLEAN
+)
+CLUSTERED BY (product_id) INTO 4 BUCKETS
+STORED AS ORC
+TBLPROPERTIES (
+    'transactional'='true'
+);
+
+
+
+SET hive.support.concurrency=true;
+SET hive.enforce.bucketing=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+SET hive.compactor.initiator.on=true;
+SET hive.compactor.worker.threads=1;
+
+
+
+
+INSERT INTO TABLE products VALUES
+(1, 'Apple', 'Fruits', 30.5, true),
+(2, 'Shampoo', 'Personal Care', 120.0, true),
+(3, 'Notebook', 'Stationery', 25.0, true),
+(4, 'Pen', 'Stationery', 10.0, true),
+(5, 'Soap', 'Personal Care', 40.0, false),
+(6, 'Banana', 'Fruits', 20.0, true);
+
+
+SELECT * FROM products WHERE price > 30;
+
+SELECT category, COUNT(*) FROM products GROUP BY category;
+
+SELECT * FROM products WHERE in_stock = true;
+
+
+UPDATE products SET price = 35.0 WHERE product_id = 1;
+
+DELETE FROM products WHERE product_id = 5;
+
+
+http://localhost:9870/
+http://localhost:8088/
+http://localhost:9864/
